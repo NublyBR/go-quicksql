@@ -7,10 +7,22 @@ A set of Go utility tools for writing SQL quickly.
 
 # ⚡️ Basic Usage
 
+Escape values to be inserted into a query
+
+```go
+escaped = quicksql.Quote(nil) // NULL
+
+escaped = quicksql.Quote([]byte("binary-data")) // 0x62696e6172792d64617461
+
+escaped = quicksql.Quote(`string" AND 1='1' -- a`) // "string\" AND 1=\'1\' -- a"
+
+escaped = quicksql.Quote(123) // 123
+```
+
 Create insert statements with specified columns
 
 ```go
-ins := NewInsert(writer, "table_name", "id", "name")
+ins := quicksql.NewInsert(writer, "table_name", "id", "name")
 ins.Add(1, "QuickSQL")
 ins.Add(2, "Hello, World!")
 ins.Flush()
@@ -29,7 +41,7 @@ type demo struct {
     Data []byte
 }
 
-ins := NewInsert(writer, "demo", demo{})
+ins := quicksql.NewInsert(writer, "demo", demo{})
 ins.Add(demo{
     ID:   1,
     Name: "QuickSQL",
@@ -50,7 +62,7 @@ ins.Flush()
 Split every `n` rows
 
 ```go
-ins := NewInsert(buf, "split", "number").Every(2)
+ins := quicksql.NewInsert(buf, "split", "number").Every(2)
 
 for i := 0; i < 10; i++ {
     ins.Add(i)
@@ -65,4 +77,6 @@ ins.Flush()
 // INSERT INTO `split` (`number`) VALUES
 // 	(2),
 // 	(3);
+//
+// ...
 ```
