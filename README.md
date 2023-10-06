@@ -62,7 +62,7 @@ ins.Flush()
 Split every `n` rows
 
 ```go
-ins := quicksql.NewInsert(buf, "split", "number").Every(2)
+ins := quicksql.NewInsert(writer, "split", "number").Every(2)
 
 for i := 0; i < 10; i++ {
     ins.Add(i)

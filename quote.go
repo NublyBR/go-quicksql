@@ -12,7 +12,7 @@ var hex = []byte(`0123456789abcdef`)
 func QuoteString(s string) string {
 	var res = make([]rune, 0, 2+2*len(s))
 
-	res = append(res, '"')
+	res = append(res, '\'')
 
 	for _, ch := range s {
 		switch ch {
@@ -35,14 +35,14 @@ func QuoteString(s string) string {
 		}
 	}
 
-	res = append(res, '"')
+	res = append(res, '\'')
 
 	return string(res)
 }
 
 func QuoteBytes(s []byte) string {
 	if len(s) == 0 {
-		return `""`
+		return `''`
 	}
 
 	var res = make([]byte, 0, 2+2*len(s))
@@ -98,7 +98,7 @@ func Quote(data any) string {
 		case reflect.Uint8:
 			return QuoteBytes(val.Bytes())
 
-		case reflect.Uint32:
+		case reflect.Int32:
 			if runes, ok := val.Interface().([]rune); ok {
 				return QuoteString(string(runes))
 			}
